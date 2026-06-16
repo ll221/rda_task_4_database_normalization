@@ -9,7 +9,7 @@ CREATE TABLE Countries (
     Name VARCHAR(50) NOT NULL
 );
 
--- Table 2: Warehouses (містить CountryID — склад належить країні)
+-- Table 2: Warehouses (belongs to a Country)
 CREATE TABLE Warehouses (
     ID INT NOT NULL PRIMARY KEY,
     WarehouseName VARCHAR(50) NOT NULL,
@@ -18,12 +18,19 @@ CREATE TABLE Warehouses (
     FOREIGN KEY (CountryID) REFERENCES Countries(ID) ON DELETE NO ACTION
 );
 
--- Table 3: ProductInventory (посилається на Warehouses, без CountryID)
+-- Table 3: Products (new — extracted from ProductInventory)
+CREATE TABLE Products (
+    ID INT NOT NULL PRIMARY KEY,
+    ProductName VARCHAR(50) NOT NULL
+);
+
+-- Table 4: ProductInventory (ID, ProductID, WarehouseAmount, WarehouseID — exactly 4 columns, 2 FKs)
 CREATE TABLE ProductInventory (
     ID INT NOT NULL PRIMARY KEY,
-    ProductName VARCHAR(50) NOT NULL,
+    ProductID INT NOT NULL,
     WarehouseAmount INT NOT NULL,
     WarehouseID INT NOT NULL,
+    FOREIGN KEY (ProductID) REFERENCES Products(ID) ON DELETE NO ACTION,
     FOREIGN KEY (WarehouseID) REFERENCES Warehouses(ID) ON DELETE NO ACTION
 );
 
@@ -37,8 +44,11 @@ INSERT INTO Warehouses (ID, WarehouseName, WarehouseAddress, CountryID)
 INSERT INTO Warehouses (ID, WarehouseName, WarehouseAddress, CountryID)
     VALUES (2, 'Warehouse-2', 'City-2, Street-2', 2);
 
+-- Populate: Products
+INSERT INTO Products (ID, ProductName) VALUES (1, 'AwesomeProduct');
+
 -- Populate: ProductInventory
-INSERT INTO ProductInventory (ID, ProductName, WarehouseAmount, WarehouseID)
-    VALUES (1, 'AwesomeProduct', 2, 1);
-INSERT INTO ProductInventory (ID, ProductName, WarehouseAmount, WarehouseID)
-    VALUES (2, 'AwesomeProduct', 5, 2);
+INSERT INTO ProductInventory (ID, ProductID, WarehouseAmount, WarehouseID)
+    VALUES (1, 1, 2, 1);
+INSERT INTO ProductInventory (ID, ProductID, WarehouseAmount, WarehouseID)
+    VALUES (2, 1, 5, 2);
