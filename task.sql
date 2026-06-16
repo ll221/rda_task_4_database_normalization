@@ -5,25 +5,25 @@ USE ShopDB;
 
 -- Table 1: Countries
 CREATE TABLE Countries (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(50)
+    ID INT NOT NULL PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL
 );
 
--- Table 2: Warehouses (містить CountryID — звідки товар)
+-- Table 2: Warehouses (містить CountryID — склад належить країні)
 CREATE TABLE Warehouses (
-    ID INT PRIMARY KEY,
-    WarehouseName VARCHAR(50),
-    WarehouseAddress VARCHAR(50),
-    CountryID INT,
+    ID INT NOT NULL PRIMARY KEY,
+    WarehouseName VARCHAR(50) NOT NULL,
+    WarehouseAddress VARCHAR(50) NOT NULL,
+    CountryID INT NOT NULL,
     FOREIGN KEY (CountryID) REFERENCES Countries(ID) ON DELETE NO ACTION
 );
 
 -- Table 3: ProductInventory (посилається на Warehouses, без CountryID)
 CREATE TABLE ProductInventory (
-    ID INT PRIMARY KEY,
-    ProductName VARCHAR(50),
-    WarehouseAmount INT,
-    WarehouseID INT,
+    ID INT NOT NULL PRIMARY KEY,
+    ProductName VARCHAR(50) NOT NULL,
+    WarehouseAmount INT NOT NULL,
+    WarehouseID INT NOT NULL,
     FOREIGN KEY (WarehouseID) REFERENCES Warehouses(ID) ON DELETE NO ACTION
 );
 
